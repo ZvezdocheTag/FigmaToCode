@@ -50,7 +50,7 @@ const run = () => {
     result = htmlMain(convertedSelection, parentId, isJsx, layerName);
   }
 
-  console.log(result);
+  // console.log(result, "SHOW RESULT BY VY");
 
   figma.ui.postMessage({
     type: "result",

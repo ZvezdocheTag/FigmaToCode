@@ -36,6 +36,7 @@ export const tailwindMain = (
 };
 
 // todo lint idea: replace BorderRadius.only(topleft: 8, topRight: 8) with BorderRadius.horizontal(8)
+// VY: note 1 generate tailwidng entry point
 const tailwindWidgetGenerator = (
   sceneNode: ReadonlyArray<AltSceneNode>,
   isJsx: boolean
@@ -43,25 +44,35 @@ const tailwindWidgetGenerator = (
   let comp = "";
 
   // filter non visible nodes. This is necessary at this step because conversion already happened.
+
   const visibleSceneNode = sceneNode.filter((d) => d.visible !== false);
 
   visibleSceneNode.forEach((node) => {
-    if (node.type === "RECTANGLE" || node.type === "ELLIPSE") {
-      comp += tailwindContainer(
-        node,
-        "",
-        "",
-        { isRelative: false, isInput: false },
-        isJsx
-      );
-    } else if (node.type === "GROUP") {
-      comp += tailwindGroup(node, isJsx);
-    } else if (node.type === "FRAME") {
+    console.log(node, "sceneNode VY");
+    if (node.type === "FRAME") {
       comp += tailwindFrame(node, isJsx);
     } else if (node.type === "TEXT") {
       comp += tailwindText(node, false, isJsx);
     }
 
+    // if (node.type === "RECTANGLE" || node.type === "ELLIPSE") {
+    //   if (node.name !== "Vector") {
+    //     comp += tailwindContainer(
+    //       node,
+    //       "",
+    //       "",
+    //       { isRelative: false, isInput: false },
+    //       isJsx
+    //     );
+    //   }
+    // } else if (node.type === "GROUP") {
+    //   comp += tailwindGroup(node, isJsx);
+    // } else if (node.type === "FRAME") {
+    //   comp += tailwindFrame(node, isJsx);
+    // } else if (node.type === "TEXT") {
+    //   comp += tailwindText(node, false, isJsx);
+    // }
+    console.log(comp, "sceneNode VY 1");
     // todo support Line
   });
 
