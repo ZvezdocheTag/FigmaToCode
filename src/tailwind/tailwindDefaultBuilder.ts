@@ -202,9 +202,18 @@ export class TailwindDefaultBuilder {
     return this;
   }
 
-  build(additionalAttr: string = ""): string {
+  build(additionalAttr: string = "", node: AltSceneNode): string {
+    // console.log(this, "INSIDE BUID vy   ", additionalAttr, node);
     this.attributes = this.name + additionalAttr + this.attributes;
     this.removeTrailingSpace();
+
+    if (node?.name === "Button" && node?.children.length > 0) {
+      node.children.forEach((item: any) => {
+        if (item.type === "TEXT") {
+          this.attributes = `btn-${item.name.toLowerCase()}`;
+        }
+      });
+    }
 
     if (this.style) {
       if (this.isJSX) {

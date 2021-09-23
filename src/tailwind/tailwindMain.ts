@@ -48,11 +48,20 @@ const tailwindWidgetGenerator = (
   const visibleSceneNode = sceneNode.filter((d) => d.visible !== false);
 
   visibleSceneNode.forEach((node) => {
-    console.log(node, "sceneNode VY");
+    console.log(node, "sceneNode VY"); //
     if (node.type === "FRAME") {
       comp += tailwindFrame(node, isJsx);
     } else if (node.type === "TEXT") {
       comp += tailwindText(node, false, isJsx);
+      // console.log(comp, "sceneNode VY 2");
+    } else if (node.type === "RECTANGLE" || node.type === "ELLIPSE") {
+      comp += tailwindContainer(
+        node,
+        "",
+        "",
+        { isRelative: false, isInput: false },
+        isJsx
+      );
     }
 
     // if (node.type === "RECTANGLE" || node.type === "ELLIPSE") {
@@ -72,7 +81,7 @@ const tailwindWidgetGenerator = (
     // } else if (node.type === "TEXT") {
     //   comp += tailwindText(node, false, isJsx);
     // }
-    console.log(comp, "sceneNode VY 1");
+    // console.log(comp, "sceneNode VY 1");s
     // todo support Line
   });
 
@@ -98,7 +107,7 @@ const tailwindGroup = (node: AltGroupNode, isJsx: boolean = false): string => {
     .position(node, parentId);
 
   if (builder.attributes || builder.style) {
-    const attr = builder.build("relative ");
+    const attr = builder.build("relative ", node);
 
     const generator = tailwindWidgetGenerator(node.children, isJsx);
 
@@ -216,25 +225,46 @@ export const tailwindContainer = (
     .shadow(node)
     .border(node);
 
+  // console.log("sceneNode VY 2;1", node, children, builder);
+
   if (attr.isInput) {
     // children before the > is not a typo.
-    return `\n<input${builder.build(additionalAttr)}${children}></input>`;
+    return `\n<input${builder.build(additionalAttr, node)}${children}></input>`;
   }
 
-  if (builder.attributes || additionalAttr) {
-    const build = builder.build(additionalAttr);
+  // console.log(builder, "sceneNode VY 2", node);
 
+  if (builder.attributes || additionalAttr) {
+    console.log(builder);
+    const build = builder.build(additionalAttr, node);
+
+    // console.log(build, "sceneNode VY ");
     // image fill and no children -- let's emit an <img />
     let tag = "div";
     let src = "";
+
+    // console.log(retrieveTopFill(node.fills), node.fills, "sceneNode VY 3");
     if (retrieveTopFill(node.fills)?.type === "IMAGE") {
+      // console.log(node, "sceneNode VY 5 Image Fills");
       tag = "img";
-      src = ` src="https://via.placeholder.com/${node.width}x${node.height}"`;
+      src = ` src="${node.name}"`;
+    }
+
+    if (node?.name === "Button") {
+      // console.log(node, "sceneNode VY 5 Image Fills");
+      tag = "button";
     }
 
     if (children) {
+      // console.log(indentString(children), "VY 222");
+      // console.log(
+      //   `\n<${tag}${build}${src}>${indentString(children)}\n</${tag}>`,
+      //   "VY 222"
+      // );
+      console.log(node, tag, build, indentString(children), "VY tag");
       return `\n<${tag}${build}${src}>${indentString(children)}\n</${tag}>`;
     } else {
+      console.log(node, tag, build, indentString(children), "VY tag singe");
       return `\n<${tag}${build}${src}/>`;
     }
   }
