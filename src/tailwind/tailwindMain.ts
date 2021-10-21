@@ -47,8 +47,11 @@ const tailwindWidgetGenerator = (
 
   const visibleSceneNode = sceneNode.filter((d) => d.visible !== false);
 
+  // TODO: wrap Figma Component to the code (map between)
   visibleSceneNode.forEach((node) => {
     console.log(node, "sceneNode VY"); //
+
+    console.log(node.name, "sceneNode VY");
     if (node.type === "FRAME") {
       comp += tailwindFrame(node, isJsx);
     } else if (node.type === "TEXT") {

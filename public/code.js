@@ -1511,15 +1511,16 @@ class TailwindDefaultBuilder {
         return this;
     }
     build(additionalAttr = "", node) {
-        // console.log(this, "INSIDE BUID vy   ", additionalAttr, node);
+        console.log(this, "here VY   ", additionalAttr, node);
         this.attributes = this.name + additionalAttr + this.attributes;
         this.removeTrailingSpace();
-        if ((node === null || node === void 0 ? void 0 : node.name) === "Button" && (node === null || node === void 0 ? void 0 : node.children.length) > 0) {
-            node.children.forEach((item) => {
-                if (item.type === "TEXT") {
-                    this.attributes = `btn-${item.name.toLowerCase()}`;
-                }
-            });
+        if (node === null || node === void 0 ? void 0 : node.name) {
+            console.log(node === null || node === void 0 ? void 0 : node.name, " here VY 1");
+            // node.children.forEach((item: any) => {
+            //   if (item.type === "TEXT") {
+            //     this.attributes = `btn-${item.name.toLowerCase()}`;
+            //   }
+            // });
         }
         if (this.style) {
             if (this.isJSX) {
@@ -4498,8 +4499,10 @@ const tailwindWidgetGenerator = (sceneNode, isJsx) => {
     let comp = "";
     // filter non visible nodes. This is necessary at this step because conversion already happened.
     const visibleSceneNode = sceneNode.filter((d) => d.visible !== false);
+    // TODO: wrap Figma Component to the code (map between)
     visibleSceneNode.forEach((node) => {
         console.log(node, "sceneNode VY"); //
+        console.log(node.name, "sceneNode VY");
         if (node.type === "FRAME") {
             comp += tailwindFrame(node, isJsx);
         }
